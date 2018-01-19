@@ -26,24 +26,6 @@ class App extends React.Component {
             )
     }
 
-    klikHyva = () => {
-        this.setState({ 
-            hyva: this.state.hyva + 1
-        })    
-    }
-
-    klikNeutraali = () => {
-        this.setState({ 
-            neutraali: this.state.neutraali + 1
-        })    
-    }
-
-    klikHuono = () => {
-        this.setState({ 
-            huono: this.state.huono + 1
-        })    
-    }
-
     asetaArvoon = (palaute) => () => {
         if (palaute === 'hyva') {
             this.setState({hyva: this.state.hyva + 1})
@@ -95,18 +77,12 @@ const Button = (props) => {
 }
 
 const Statistic = (props) => {
-    const {text, state} = props
-    if (text === 'positiivisia') {
-        return (
-            <div>
-                <p>{text} {state} %</p>
-            </div>
-        )
-    }
+    const {text, state, text2} = props
     return (
-        <div>
-            <p>{text} {state}</p>
-        </div>
+        <tr>
+            <td>{text}</td> 
+            <td>{state} {text2}</td>
+        </tr>
     )
 }
 
@@ -125,26 +101,35 @@ const Statistics = (props) => {
         <div>
             <h1>Statistiikka</h1>
 
-            <Statistic
-                text="hyvä"
-                state={state.hyva}
-            />
-            <Statistic
-                text="neutraali"
-                state={state.neutraali}
-            />
-            <Statistic
-                text="huono"
-                state={state.huono}
-            />
-            <Statistic
-                text="keskiarvo"
-                state={keskiarvo}
-            />
-            <Statistic
-                text="positiivisia"
-                state={positiivisia}
-            />  
+            <table>
+                <tbody>
+                    <Statistic
+                        text="hyvä"
+                        state={state.hyva}
+                        text2 = ''
+                    />
+                    <Statistic
+                        text="neutraali"
+                        state={state.neutraali}
+                        text2 = ''
+                    />
+                    <Statistic
+                        text="huono"
+                        state={state.huono}
+                        text2 = ''
+                    />
+                    <Statistic
+                        text="keskiarvo"
+                        state={keskiarvo}
+                        text2 = ''
+                    />
+                    <Statistic
+                        text="positiivisia"
+                        state={positiivisia}
+                        text2 = '%'
+                    />
+                </tbody>
+            </table>
         </div>
     )
 }

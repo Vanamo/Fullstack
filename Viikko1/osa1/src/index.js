@@ -10,29 +10,46 @@ const Otsikko = (props) => {
 }
 
 const Sisalto = (props) => {
+    const {osat} = props
     return (
         <div>
-            <Osa osa={props.osat[0].nimi} tehtavia={props.osat[0].tehtavia} />
-            <Osa osa={props.osat[1].nimi} tehtavia={props.osat[1].tehtavia} />
-            <Osa osa={props.osat[2].nimi} tehtavia={props.osat[2].tehtavia} />
+            {osat.map(osa =>
+            <Osa key={osa.id} osa={osa} />)
+            }
         </div>
     )
 }
 
 const Yhteensa = (props) => {
+    const {osat} = props
+    const tehtavat = osat.map(osa => osa.tehtavia)
+    const reducer = (acc, cur) => acc + cur
+    const summa = tehtavat.reduce(reducer)
+
     return (
         <div>
-            <p>yhteensä {props.osat[0].tehtavia + props.osat[1].tehtavia + 
-                props.osat[2].tehtavia} tehtävää</p>
+            <p>yhteensä {summa} tehtävää</p>
         </div>
     )
 }
 
 const Osa = (props) => {
+    const {osa} = props
     return (
         <div>
-            <p>{props.osa} {props.tehtavia}</p>
+            <p>{osa.nimi} {osa.tehtavia}</p>
         </div>
+    )
+}
+
+const Kurssi = (props) => {
+    const {kurssi} = props 
+    return (
+        <div>
+            <Otsikko kurssi={kurssi.nimi}/>
+            <Sisalto osat={kurssi.osat} />
+            <Yhteensa osat={kurssi.osat} />
+        </div>        
     )
 }
 
@@ -42,24 +59,25 @@ const App = () => {
         osat: [
           {
             nimi: 'Reactin perusteet',
-            tehtavia: 10
+            tehtavia: 10,
+            id: 1
           },
           {
             nimi: 'Tiedonvälitys propseilla',
-            tehtavia: 7
+            tehtavia: 7,
+            id: 2
           },
           {
             nimi: 'Komponenttien tila',
-            tehtavia: 14
+            tehtavia: 14,
+            id: 3
           }
         ]
       }
 
   return (
     <div>
-        <Otsikko kurssi={kurssi.nimi}/>
-        <Sisalto osat={kurssi.osat} />
-        <Yhteensa osat={kurssi.osat} />
+        <Kurssi kurssi={kurssi}/>
     </div>
   )
 }

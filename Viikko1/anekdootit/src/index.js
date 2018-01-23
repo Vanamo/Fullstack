@@ -49,6 +49,7 @@ class App extends React.Component {
 
                 <h1>Anecdote with most votes</h1>
                 <p>{this.props.anecdotes[this.suosituin()]}</p>
+                <p>has {this.state.aanet[this.suosituin()]} votes</p>
             </div>
         )
     }

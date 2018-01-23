@@ -12,18 +12,29 @@ class App extends React.Component {
 
   addPerson = (event) => {
     event.preventDefault()
-    const personObject = {
-      name: this.state.newName,
-      id: this.state.persons.length + 1
+
+    for (var i = 0; i < this.state.persons.length; i++) {
+      if (this.state.persons[i].name === this.state.newName) { 
+        this.setState({
+          newName: ''
+        }) 
+    } 
+    
+      const personObject = {
+          name: this.state.newName,
+          id: this.state.persons.length + 1
+      }
+  
+      const persons = this.state.persons.concat(personObject)
+  
+      this.setState({
+          persons,
+          newName: ''
+      })
     }
 
-    const persons = this.state.persons.concat(personObject)
-
-    this.setState({
-      persons,
-      newName: ''
-    })
   }
+  
 
   handleNameChange = (event) => {
     console.log(event.target.value)

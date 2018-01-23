@@ -6,12 +6,12 @@ class App extends React.Component {
         super(props)
         this.state = {
         selected: 0,
-        aanet: [0, 0, 0, 0, 0]
+        aanet: [0, 0, 0, 0, 0, 0]
         }
     }
 
     arvoSeuraava = () => {
-        const random = Math.floor((Math.random() * 5) + 1)
+        const random = Math.floor((Math.random() * 6))
         this.setState({selected: random})
     }
 
@@ -19,6 +19,18 @@ class App extends React.Component {
         let aanet = this.state.aanet
         aanet[this.state.selected] = this.state.aanet[this.state.selected] + 1
         this.setState({aanet: aanet})
+    }
+
+    suosituin = () => {
+        let suosituin = this.state.aanet[0]
+        let ind = 0
+        this.state.aanet.forEach(function(item, index, array) {
+            if (item > suosituin) {
+                suosituin = item
+                ind = index
+            }
+        })
+        return (ind)
     }
 
     render() {
@@ -34,6 +46,9 @@ class App extends React.Component {
                     funktio={this.arvoSeuraava}
                     text={'next anecdote'}
                 />
+
+                <h1>Anecdote with most votes</h1>
+                <p>{this.props.anecdotes[this.suosituin()]}</p>
             </div>
         )
     }

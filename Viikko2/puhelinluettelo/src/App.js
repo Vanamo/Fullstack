@@ -6,8 +6,10 @@ class App extends React.Component {
     super(props)
     this.state = {
       persons: props.persons,
+      filtered: props.persons,
       newName: '',
-      newNumber: ''
+      newNumber: '',
+      filter: ''
     }
   }
 
@@ -24,38 +26,45 @@ class App extends React.Component {
     event.preventDefault()
 
     if (this.isNew()) {
-    
-        const personObject = {
-            name: this.state.newName,
-            number: this.state.newNumber,
-            id: this.state.persons.length + 1
-        }
-    
-        const persons = this.state.persons.concat(personObject)
 
-        this.setState({
-          persons,
-          newName: '',
-          newNumber: ''
-        })
-    
+      const personObject = {
+        name: this.state.newName,
+        number: this.state.newNumber,
+        id: this.state.persons.length + 1
+      }
+
+      const persons = this.state.persons.concat(personObject)
+
+      this.setState({
+        persons,
+        newName: '',
+        newNumber: ''
+      })
+
     } else {
-        this.setState({
-          newName: '',
-          newNumber: ''
-        })
-      
-        return (
-          alert('Nimi on jo puhelinluettelossa')
-        )
+      this.setState({
+        newName: '',
+        newNumber: ''
+      })
+
+      return (
+        alert('Nimi on jo puhelinluettelossa')
+      )
     }
   }
 
 
 
   handleChange = (type) => (event) => {
-    console.log(event.target.value, type) 
-    this.setState({[type]: event.target.value})
+    console.log(event.target.value, type)
+    this.setState({ [type]: event.target.value })
+  }
+
+  filter = (event) => {
+    const filter = event.target.value
+    this.setState({
+      filter
+    })
   }
 
   render() {
@@ -63,37 +72,49 @@ class App extends React.Component {
       <div>
         <h2>Puhelinluettelo</h2>
 
-          <div>
-            <form onSubmit={this.addPerson}>
-              <div>
-                nimi: 
-                <input 
-                  value={this.state.newName}
-                  onChange={this.handleChange('newName')}
-                />
-              </div>
-              <div>
-                numero: 
-                <input 
-                  value={this.state.newNumber}
-                  onChange={this.handleChange('newNumber')}
-                />
-              </div>              
-              <div>
-                <button type="submit">lisää</button>
-              </div>
-            </form>
-          </div>
-        
+        <div>
+          rajaa näytettäviä
+            <input
+            value={this.state.filter}
+            onChange={this.filter}
+          />
+        </div>
+
+        <h3>Lisää uusi</h3>
+        <div>
+          <form onSubmit={this.addPerson}>
+            <div>
+              nimi:
+                <input
+                value={this.state.newName}
+                onChange={this.handleChange('newName')}
+              />
+            </div>
+            <div>
+              numero:
+                <input
+                value={this.state.newNumber}
+                onChange={this.handleChange('newNumber')}
+              />
+            </div>
+            <div>
+              <button type="submit">lisää</button>
+            </div>
+          </form>
+        </div>
+
         <h2>Numerot</h2>
-          <div>
-            <table>
-              <tbody>
-                {this.state.persons.map(person => <Person key={person.id} 
-                  person={person} />)}
-              </tbody>
-            </table>
-          </div>
+        <div>
+          <table>
+            <tbody>
+              {this.state.persons
+                .filter(person => 
+                  person.name.toLowerCase().includes(this.state.filter.toLowerCase()))
+                .map(person => <Person key={person.id}
+                person={person} />)}
+            </tbody>
+          </table>
+        </div>
       </div>
     )
   }

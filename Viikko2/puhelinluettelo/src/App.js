@@ -10,30 +10,43 @@ class App extends React.Component {
     }
   }
 
-  addPerson = (event) => {
-    event.preventDefault()
-
+  isNew = () => {
     for (var i = 0; i < this.state.persons.length; i++) {
       if (this.state.persons[i].name === this.state.newName) { 
         this.setState({
           newName: ''
-        }) 
+        })        
+        return (
+          false
+        )} 
     } 
+    return true
+  }
+
+  addPerson = (event) => {
+    event.preventDefault()
+
+    if (this.isNew()) {
     
-      const personObject = {
-          name: this.state.newName,
-          id: this.state.persons.length + 1
+        const personObject = {
+            name: this.state.newName,
+            id: this.state.persons.length + 1
+        }
+    
+        const persons = this.state.persons.concat(personObject)
+    
+        this.setState({
+            persons,
+            newName: ''
+        })
+      } else {
+        return (
+          alert('Nimi on jo puhelinluettelossa')
+        )
       }
-  
-      const persons = this.state.persons.concat(personObject)
-  
-      this.setState({
-          persons,
-          newName: ''
-      })
     }
 
-  }
+  
   
 
   handleNameChange = (event) => {

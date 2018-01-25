@@ -6,7 +6,7 @@ const OneCountry = ({ country }) => {
             <h1>{country.name}</h1>
             <p>capital: {country.capital}</p>
             <p>population: {country.population}</p>
-            <img style={{height: "auto", width:"80px"}} src={country.flag} alt="flag"></img>
+            <img style={{ height: "auto", width: "80px" }} src={country.flag} alt="flag"></img>
         </div>
     )
 }

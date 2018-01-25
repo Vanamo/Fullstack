@@ -1,16 +1,25 @@
 import React from 'react'
 import Person from './components/Person'
+import personService from './services/persons'
+
 
 class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      persons: props.persons,
-      filtered: props.persons,
+      persons: [],
       newName: '',
       newNumber: '',
       filter: ''
     }
+  }
+
+  componentWillMount() {
+    personService
+      .getAll()
+      .then(response => {
+        this.setState({ persons: response.data })
+      })
   }
 
   isNew = () => {
@@ -30,16 +39,19 @@ class App extends React.Component {
       const personObject = {
         name: this.state.newName,
         number: this.state.newNumber,
-        id: this.state.persons.length + 1
       }
 
-      const persons = this.state.persons.concat(personObject)
-
-      this.setState({
-        persons,
-        newName: '',
-        newNumber: ''
-      })
+      personService
+        .create(personObject)
+        .then(response => {
+          console.log(response)
+          const persons = this.state.persons.concat(response.data)
+          this.setState({
+            persons,
+            newName: '',
+            newNumber: ''
+          })
+        })
 
     } else {
       this.setState({
@@ -56,11 +68,10 @@ class App extends React.Component {
 
 
   handleChange = (type) => (event) => {
-    console.log(event.target.value, type)
     this.setState({ [type]: event.target.value })
   }
 
-  filter = (event) => {
+  handleFilter = (event) => {
     const filter = event.target.value
     this.setState({
       filter
@@ -76,7 +87,7 @@ class App extends React.Component {
           rajaa näytettäviä
             <input
             value={this.state.filter}
-            onChange={this.filter}
+            onChange={this.handleFilter}
           />
         </div>
 

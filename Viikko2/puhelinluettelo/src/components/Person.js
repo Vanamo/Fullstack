@@ -1,12 +1,37 @@
 import React from 'react'
+import personService from '../../src/services/persons'
 
-const Person = ({person}) => {
-    return (
-        <tr>
-            <td>{person.name}</td>
-            <td>{person.number}</td>
-        </tr>
-    )
+
+class Person extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            show: true
+        }
+      }
+
+    deletePerson = (id) => () => {
+        personService
+            .del(id)
+            .then(response => {
+                this.setState({show: false})
+            })
+    }
+
+    render = () => {
+        if (!this.state.show) {
+            return null
+        }
+        const person = this.props.person
+        return (
+            <tr>
+                <td>{person.name}</td>
+                <td>{person.number}</td>
+                <td><button onClick={this.deletePerson(person.id)}>Poista</button></td>
+            </tr>
+        )
+    }
 }
+
 
 export default Person

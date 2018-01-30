@@ -58,7 +58,7 @@ class App extends React.Component {
       if (window.confirm(this.state.newName + " on jo luettelossa, " +
         "korvataanko vanha numero uudella?")) {
         const changedPerson = { ...oldPerson, number: this.state.newNumber }
-        const id = oldPerson.id
+        const id = changedPerson.id
         personService
           .update(id, changedPerson)
           .then(changedPerson => {
@@ -70,6 +70,24 @@ class App extends React.Component {
             setTimeout(() => {
               this.setState({ success: null })
             }, 5000)
+          })
+          .catch(error => {
+            this.componentWillMount()
+            personService
+              .create(changedPerson)
+              .then(response => {
+                console.log(response)
+                const persons = this.state.persons.concat(response.data)
+                this.setState({
+                  persons,
+                  newName: '',
+                  newNumber: '',
+                  success: `muutettiin henkilön '${changedPerson.name}' puhelinnumero`
+                })
+                setTimeout(() => {
+                  this.setState({ success: null })
+                }, 5000)
+              })
           })
       }
       this.setState({
@@ -84,7 +102,9 @@ class App extends React.Component {
       personService
         .del(person.id)
         .then(response => {
+          const persons = this.state.persons.filter(p => p.id !== person.id)
           this.setState({
+            persons: persons,
             show: false,
             success: `Poistettiin '${person.name}'`
           })
@@ -154,7 +174,6 @@ class App extends React.Component {
                   person.name.toLowerCase().includes(this.state.filter.toLowerCase()))
                 .map(person => <Person key={person.id}
                   person={person} delete={this.deletePerson} />)}
-              {this.componentWillMount()}
             </tbody>
           </table>
         </div>

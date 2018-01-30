@@ -19,6 +19,16 @@
       "name": "Lea Kutvonen",
       "number": "040-123456",
       "id": 4
+    },
+    {
+      "name": "vanamo",
+      "number": "098",
+      "id": 5
+    },
+    {
+      "name": "Vanamo",
+      "number": "456",
+      "id": 6
     }
   ]
 }

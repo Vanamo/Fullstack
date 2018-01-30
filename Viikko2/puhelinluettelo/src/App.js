@@ -22,19 +22,13 @@ class App extends React.Component {
       })
   }
 
-  isNew = () => {
-    const tulos = this.state.persons
-      .find(person => person.name === this.state.newName)
-    console.log('tulos', tulos)
-
-    return !tulos
-
-  }
-
   addPerson = (event) => {
     event.preventDefault()
 
-    if (this.isNew()) {
+    const oldPerson = this.state.persons
+      .find(person => person.name === this.state.newName)
+
+    if (!oldPerson) {
 
       const personObject = {
         name: this.state.newName,
@@ -54,14 +48,24 @@ class App extends React.Component {
         })
 
     } else {
+      if (window.confirm(this.state.newName + " on jo luettelossa, " +
+        "korvataanko vanha numero uudella?")) {
+        const changedPerson = {...oldPerson, number: this.state.newNumber}
+        const id = oldPerson.id
+        console.log("id", id)
+        personService
+          .update(id, changedPerson)
+          .then(changedPerson => {
+            const persons = this.state.persons.filter(person => person.id !== id)
+            this.setState({
+              persons: persons.concat(changedPerson)
+            })
+          })
+      }
       this.setState({
         newName: '',
         newNumber: ''
       })
-
-      return (
-        alert('Nimi on jo puhelinluettelossa')
-      )
     }
   }
 

@@ -20,7 +20,7 @@ class Person extends React.Component {
             <tr>
                 <td>{person.name}</td>
                 <td>{person.number}</td>
-                <td><button onClick={this.props.deletePerson(person)}>Poista</button></td>
+                <td><button onClick={this.props.delete(person)}>Poista</button></td>
             </tr>
         )
     }

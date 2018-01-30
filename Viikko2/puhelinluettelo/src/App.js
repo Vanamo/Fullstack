@@ -79,19 +79,22 @@ class App extends React.Component {
     }
   }
 
-  deletePerson = (person) => {
-    return () => {
-      if (window.confirm("Poistetaanko " + person.name + "?")) {
-        personService
-          .del(person.id)
+  deletePerson = (person) => () => {
+    if (window.confirm("Poistetaanko " + person.name + "?")) {
+      personService
+        .del(person.id)
         .then(response => {
-          // this.setState({
-          //   show: false
-          // })
+          this.setState({
+            show: false,
+            success: `Poistettiin '${person.name}'`
+          })
+          setTimeout(() => {
+            this.setState({ success: null })
+          }, 5000)
         })
-      }
     }
   }
+
 
   handleChange = (type) => (event) => {
     this.setState({ [type]: event.target.value })
@@ -119,7 +122,7 @@ class App extends React.Component {
           />
         </div>
 
-        <h3>Lisää uusi</h3>
+        <h3>Lisää uusi tai vaihda numeroa</h3>
         <div>
           <form onSubmit={this.addPerson}>
             <div>
@@ -150,7 +153,7 @@ class App extends React.Component {
                 .filter(person =>
                   person.name.toLowerCase().includes(this.state.filter.toLowerCase()))
                 .map(person => <Person key={person.id}
-                  person={person} />)}
+                  person={person} delete={this.deletePerson} />)}
               {this.componentWillMount()}
             </tbody>
           </table>

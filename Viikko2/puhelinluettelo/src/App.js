@@ -65,8 +65,6 @@ class App extends React.Component {
     }
   }
 
-
-
   handleChange = (type) => (event) => {
     this.setState({ [type]: event.target.value })
   }
@@ -119,10 +117,11 @@ class App extends React.Component {
           <table>
             <tbody>
               {this.state.persons
-                .filter(person => 
+                .filter(person =>
                   person.name.toLowerCase().includes(this.state.filter.toLowerCase()))
                 .map(person => <Person key={person.id}
-                person={person} />)}
+                  person={person} />)}
+              {this.componentWillMount()}
             </tbody>
           </table>
         </div>

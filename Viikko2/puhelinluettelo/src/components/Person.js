@@ -6,16 +6,20 @@ class Person extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            show: true
+            show: true,
         }
-      }
+    }
 
-    deletePerson = (id) => () => {
-        personService
-            .del(id)
-            .then(response => {
-                this.setState({show: false})
-            })
+    deletePerson = (person) => () => {
+        if (window.confirm("Poistetaanko " + person.name + "?")) {
+            personService
+                .del(person.id)
+                .then(response => {
+                    this.setState({
+                        show: false,
+                    })
+                })
+        }
     }
 
     render = () => {
@@ -27,7 +31,7 @@ class Person extends React.Component {
             <tr>
                 <td>{person.name}</td>
                 <td>{person.number}</td>
-                <td><button onClick={this.deletePerson(person.id)}>Poista</button></td>
+                <td><button onClick={this.deletePerson(person)}>Poista</button></td>
             </tr>
         )
     }

@@ -1,6 +1,8 @@
 import React from 'react'
 import Person from './components/Person'
+import Notification from './components/Notification'
 import personService from './services/persons'
+import './index.css'
 
 
 class App extends React.Component {
@@ -10,7 +12,8 @@ class App extends React.Component {
       persons: [],
       newName: '',
       newNumber: '',
-      filter: ''
+      filter: '',
+      success: null
     }
   }
 
@@ -43,29 +46,50 @@ class App extends React.Component {
           this.setState({
             persons,
             newName: '',
-            newNumber: ''
+            newNumber: '',
+            success: `Lisättiin '${personObject.name}'`
           })
+          setTimeout(() => {
+            this.setState({ success: null })
+          }, 5000)
         })
 
     } else {
       if (window.confirm(this.state.newName + " on jo luettelossa, " +
         "korvataanko vanha numero uudella?")) {
-        const changedPerson = {...oldPerson, number: this.state.newNumber}
+        const changedPerson = { ...oldPerson, number: this.state.newNumber }
         const id = oldPerson.id
-        console.log("id", id)
         personService
           .update(id, changedPerson)
           .then(changedPerson => {
             const persons = this.state.persons.filter(person => person.id !== id)
             this.setState({
-              persons: persons.concat(changedPerson)
+              persons: persons.concat(changedPerson),
+              success: `Muutettiin henkilön '${oldPerson.name}' puhelinnumero`
             })
+            setTimeout(() => {
+              this.setState({ success: null })
+            }, 5000)
           })
       }
       this.setState({
         newName: '',
         newNumber: ''
       })
+    }
+  }
+
+  deletePerson = (person) => {
+    return () => {
+      if (window.confirm("Poistetaanko " + person.name + "?")) {
+        personService
+          .del(person.id)
+        .then(response => {
+          // this.setState({
+          //   show: false
+          // })
+        })
+      }
     }
   }
 
@@ -84,6 +108,8 @@ class App extends React.Component {
     return (
       <div>
         <h2>Puhelinluettelo</h2>
+
+        <Notification message={this.state.success} />
 
         <div>
           rajaa näytettäviä

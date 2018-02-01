@@ -13,7 +13,8 @@ class App extends React.Component {
       newName: '',
       newNumber: '',
       filter: '',
-      success: null
+      success: null,
+      error: null
     }
   }
 

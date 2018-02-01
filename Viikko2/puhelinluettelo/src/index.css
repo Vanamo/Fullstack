@@ -6,3 +6,12 @@
   padding: 8px;
   margin-bottom: 20px;
 }
+
+.error {
+  color: black;
+  background: red;
+  font-size: 17px;
+  border-style: hidden;
+  padding: 8px;
+  margin-bottom: 20px;
+}

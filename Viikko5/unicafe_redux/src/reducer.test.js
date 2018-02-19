@@ -1,5 +1,5 @@
-import deepFreeze from 'deep-freeze'
 import counterReducer from './reducer'
+import deepFreeze from 'deep-freeze'
 
 describe('unicafe reducer', () => {
   const initialState = {
@@ -8,5 +8,28 @@ describe('unicafe reducer', () => {
     bad: 0
   }
 
-  it('should return a proper initial state when called with undefined state')
+  it('should return a proper initial state when called with undefined state', () => {
+    const action = {
+      type: 'DO_NOTHING'
+    }
+
+    const newState = counterReducer(undefined, action)
+    expect(newState).toEqual(initialState)
+  })
+
+  it('good is incremented', () => {
+    const action = {
+      type: 'GOOD'
+    }
+    const state = initialState
+
+    deepFreeze(state)
+    const newState = counterReducer(state, action)
+    console.log(newState)
+    expect(newState).toEqual({
+      good: 1,
+      ok: 0,
+      bad: 0
+    })
+  })
 })

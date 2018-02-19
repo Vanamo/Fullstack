@@ -3,9 +3,30 @@ import ReactDOM from 'react-dom'
 import { createStore } from 'redux'
 import counterReducer from './reducer'
 
+const store = createStore(counterReducer)
+
 const Statistiikka = () => {
   const state = store.getState()
   const palautteita = state.good + state.ok + state.bad
+
+  const keskiarvo = () => {
+    const state = store.getState()
+    return (
+      (state.good - state.bad) / (state.good
+        + state.ok + state.bad)
+    )
+  }
+
+  const positiivisia = () => {
+    return (
+      state.good / (state.good
+        + state.ok + state.bad) * 100
+    )
+  }
+
+  const klik = (nappi) => () => {
+    store.dispatch({ type: nappi })
+  }
 
   if (palautteita === 0) {
     return (
@@ -35,25 +56,23 @@ const Statistiikka = () => {
           </tr>
           <tr>
             <td>keskiarvo</td>
-            <td></td>
+            <td>{keskiarvo()}</td>
           </tr>
           <tr>
             <td>positiivisia</td>
-            <td></td>
+            <td>{positiivisia()} %</td>
           </tr>
         </tbody>
       </table>
 
-      <button>nollaa tilasto</button>
+      <button onClick={klik('ZERO')}>nollaa tilasto</button>
     </div >
   )
 }
 
-const store = createStore(counterReducer)
-
 class App extends React.Component {
   klik = (nappi) => () => {
-    store.dispatch({ type: { nappi } })
+    store.dispatch({ type: nappi })
   }
 
 
